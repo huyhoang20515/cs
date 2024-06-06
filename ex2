@@ -1,0 +1,72 @@
+using System;
+
+public class KhongDuSoDuException : Exception
+{
+    public KhongDuSoDuException(string message) : base(message)
+    {
+    }
+}
+
+public class SoTienAmException : Exception
+{
+    public SoTienAmException(string message) : base(message)
+    {
+    }
+}
+
+public class TaiKhoanNganHang
+{
+    private double soDu;
+
+    public double SoDu => soDu;
+
+    public void GuiTien(double soTien)
+    {
+        if (soTien < 0)
+        {
+            throw new SoTienAmException("So tien gui khong duoc am.");
+        }
+        soDu += soTien;
+    }
+
+    public void RutTien(double soTien)
+    {
+        if (soTien < 0)
+        {
+            throw new SoTienAmException("So tien rut khong duoc am.");
+        }
+        if (soTien > soDu)
+        {
+            throw new KhongDuSoDuException("Khong du so du trong tai khoan.");
+        }
+        soDu -= soTien;
+    }
+}
+
+public class ChuongTrinh
+{
+    public static void Main(string[] args)
+    {
+        try
+        {
+            TaiKhoanNganHang taiKhoan = new TaiKhoanNganHang();
+            taiKhoan.GuiTien(1000);
+            Console.WriteLine("So du tai khoan sau khi gui tien: " + taiKhoan.SoDu);
+            taiKhoan.RutTien(500);
+            Console.WriteLine("So du tai khoan sau khi rut tien: " + taiKhoan.SoDu);
+            taiKhoan.RutTien(2000);
+        }
+        catch (KhongDuSoDuException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        catch (SoTienAmException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Da xay ra loi: " + ex.Message);
+        }
+    }
+}
